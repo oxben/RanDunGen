@@ -18,6 +18,27 @@ texture = ExtResource( 1 )
 region = true
 region_rect = Rect2( 0, 80, 32, 32 )
 
+[node name="Floor-2" type="Sprite" parent="."]
+
+transform/pos = Vector2( 16, 96 )
+texture = ExtResource( 1 )
+region = true
+region_rect = Rect2( 0, 120, 32, 32 )
+
+[node name="Floor-3" type="Sprite" parent="."]
+
+transform/pos = Vector2( 16, 136 )
+texture = ExtResource( 1 )
+region = true
+region_rect = Rect2( 0, 160, 32, 32 )
+
+[node name="Floor-4" type="Sprite" parent="."]
+
+transform/pos = Vector2( 16, 176 )
+texture = ExtResource( 1 )
+region = true
+region_rect = Rect2( 0, 200, 32, 32 )
+
 [node name="Wall-1" type="Sprite" parent="."]
 
 transform/pos = Vector2( 56, 16 )
