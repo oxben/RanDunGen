@@ -4,6 +4,13 @@
 
 [node name="Node2D" type="Node2D"]
 
+[node name="Dirt-0" type="Sprite" parent="."]
+
+transform/pos = Vector2( 96, 16 )
+texture = ExtResource( 1 )
+region = true
+region_rect = Rect2( 40, 0, 32, 32 )
+
 [node name="Floor-0" type="Sprite" parent="."]
 
 transform/pos = Vector2( 16, 16 )
@@ -39,14 +46,14 @@ texture = ExtResource( 1 )
 region = true
 region_rect = Rect2( 0, 200, 32, 32 )
 
-[node name="Wall-1" type="Sprite" parent="."]
+[node name="Wall-0" type="Sprite" parent="."]
 
 transform/pos = Vector2( 56, 16 )
 texture = ExtResource( 1 )
 region = true
 region_rect = Rect2( 640, 40, 32, 32 )
 
-[node name="Wall-2" type="Sprite" parent="."]
+[node name="Wall-1" type="Sprite" parent="."]
 
 transform/pos = Vector2( 56, 56 )
 texture = ExtResource( 1 )
