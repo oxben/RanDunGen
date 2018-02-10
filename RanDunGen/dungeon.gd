@@ -156,20 +156,20 @@ class Room:
 
 func _ready():
     set_process_input(true)
-    generate_dungeon()
-    rooms.append(Room.new(ROOM1))
-    rooms.append(Room.new(ROOM2))
-    rooms.append(Room.new(ROOM3))
-    rooms.append(Room.new(ROOM4))
-    rooms.append(Room.new(ROOM5))
-
-    draw_room(rooms[0], 0, 0)
-    rooms[0].rotate(90)
-    draw_room(rooms[0], 5, 0)
-    rooms[0].rotate(180)
-    draw_room(rooms[0], 10, 0)
-    rooms[0].rotate(270)
-    draw_room(rooms[0], 15, 0)
+    generate_dungeon_3()
+#    rooms.append(Room.new(ROOM1))
+#    rooms.append(Room.new(ROOM2))
+#    rooms.append(Room.new(ROOM3))
+#    rooms.append(Room.new(ROOM4))
+#    rooms.append(Room.new(ROOM5))
+#
+#    draw_room(rooms[0], 0, 0)
+#    rooms[0].rotate(90)
+#    draw_room(rooms[0], 5, 0)
+#    rooms[0].rotate(180)
+#    draw_room(rooms[0], 10, 0)
+#    rooms[0].rotate(270)
+#    draw_room(rooms[0], 15, 0)
 
 func _input(event):
     #if event.type == InputEvent.KEY:
@@ -199,7 +199,7 @@ func generate_dungeon():
     var tileset = tilemap.get_tileset()
     var tiles_ids = tileset.get_tiles_ids()
     var num_tiles = tiles_ids.size()
-    var tile_size = tilemap.get_cell_size().width
+    var tile_size = tilemap.get_cell_size().length()
     var id
     for x in range(D_WIDTH):
         for y in range(D_HEIGHT):

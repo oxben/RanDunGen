@@ -1,63 +1,62 @@
-[gd_scene load_steps=2 format=1]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://assets/gfx/tiles-02.png" type="Texture" id=1]
 
 [node name="Node2D" type="Node2D"]
 
+
 [node name="Dirt-0" type="Sprite" parent="."]
 
-transform/pos = Vector2( 96, 16 )
+position = Vector2( 96, 16 )
 texture = ExtResource( 1 )
-region = true
+region_enabled = true
 region_rect = Rect2( 40, 0, 32, 32 )
 
 [node name="Floor-0" type="Sprite" parent="."]
 
-transform/pos = Vector2( 16, 16 )
+position = Vector2( 16, 16 )
 texture = ExtResource( 1 )
-region = true
+region_enabled = true
 region_rect = Rect2( 0, 40, 32, 32 )
 
 [node name="Floor-1" type="Sprite" parent="."]
 
-transform/pos = Vector2( 16, 56 )
+position = Vector2( 16, 56 )
 texture = ExtResource( 1 )
-region = true
+region_enabled = true
 region_rect = Rect2( 0, 80, 32, 32 )
 
 [node name="Floor-2" type="Sprite" parent="."]
 
-transform/pos = Vector2( 16, 96 )
+position = Vector2( 16, 96 )
 texture = ExtResource( 1 )
-region = true
+region_enabled = true
 region_rect = Rect2( 0, 120, 32, 32 )
 
 [node name="Floor-3" type="Sprite" parent="."]
 
-transform/pos = Vector2( 16, 136 )
+position = Vector2( 16, 136 )
 texture = ExtResource( 1 )
-region = true
+region_enabled = true
 region_rect = Rect2( 0, 160, 32, 32 )
 
 [node name="Floor-4" type="Sprite" parent="."]
 
-transform/pos = Vector2( 16, 176 )
+position = Vector2( 16, 176 )
 texture = ExtResource( 1 )
-region = true
+region_enabled = true
 region_rect = Rect2( 0, 200, 32, 32 )
 
 [node name="Wall-0" type="Sprite" parent="."]
 
-transform/pos = Vector2( 56, 16 )
+position = Vector2( 56, 16 )
 texture = ExtResource( 1 )
-region = true
+region_enabled = true
 region_rect = Rect2( 640, 40, 32, 32 )
 
 [node name="Wall-1" type="Sprite" parent="."]
 
-transform/pos = Vector2( 56, 56 )
+position = Vector2( 56, 56 )
 texture = ExtResource( 1 )
-region = true
+region_enabled = true
 region_rect = Rect2( 640, 80, 32, 32 )
-
-
