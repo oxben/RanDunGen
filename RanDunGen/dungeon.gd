@@ -169,7 +169,8 @@ class Room:
 func _ready():
     set_process_input(true)
     get_node("SeedEdit").text = "0"
-    generate_dungeon_3(0)
+    get_node("RoomEdit").text = "8"
+    generate_dungeon_3(0, 8)
 #    rooms.append(Room.new(ROOM1))
 #    rooms.append(Room.new(ROOM2))
 #    rooms.append(Room.new(ROOM3))
@@ -194,13 +195,18 @@ func _input(event):
         var dungeon_seed = randi()
         get_node("SeedEdit").text = str(dungeon_seed)
         # Generate dungeon
-        generate_dungeon_3(dungeon_seed)
+        generate_dungeon_3(dungeon_seed, get_node("RoomEdit").text.to_int())
         return
 
 func _on_SeedEdit_text_entered(new_text):
-    generate_dungeon_3(new_text.to_int())
+    generate_dungeon_3(new_text.to_int(), get_node("RoomEdit").text.to_int())
+    get_node("SeedEdit").release_focus()
 
-func draw_room(room, ox, oy):
+func _on_RoomEdit_text_entered(new_text):
+    generate_dungeon_3(get_node("SeedEdit").text.to_int(), new_text.to_int())
+    get_node("RoomEdit").release_focus()
+
+func draw_tilemap(room, ox, oy):
     var tiles = room.get_tiles()
     var tilemap = get_node("TileMap")
     var id
@@ -261,7 +267,7 @@ func generate_dungeon_2():
                         count += 1
                 else:
                     break
-            draw_room(rooms[id], x * 5, y * 5)
+            draw_tilemap(rooms[id], x * 5, y * 5)
             prev_portals = portals
 
 func alloc_array(width, height):
@@ -274,15 +280,16 @@ func alloc_array(width, height):
         a[y] = b
     return a
 
-func fill_box(a, x, y, w, h):
+func fill_box(a, x, y, w, h, tile_type):
     for i in range(y, y+h):
         for j in range(x, x+w):
-            a[i][j] = D_FLOOR
+            a[i][j] = tile_type
 
 func draw_walls(a, w, h):
     var prev = -1
     var curr = -1
     var next = -1
+    # detect wall locations by scanning vertically 
     for y in range(h):
         for x in range(w):
             curr = a[y][x]
@@ -291,6 +298,7 @@ func draw_walls(a, w, h):
             elif curr == D_DIRT and prev in D_FLOORS:
                 a[y][x] = D_WALL
             prev = a[y][x]
+    # detect wall locations by scanning horizontally 
     prev = -1
     for x in range(w):
         for y in range(h):
@@ -385,19 +393,18 @@ func dig_corridors(a, aw, ah, rx, ry, rw, rh):
             else:
                 break
 
-func generate_dungeon_3(dungeon_seed):
+func generate_dungeon_3(dungeon_seed, room_num = 8):
     seed(dungeon_seed)
     var dungeon = alloc_array(D_WIDTH, D_HEIGHT)
-    var room_num = 8
     for idx in range(room_num):
         var x = min(1 + randi() % (D_WIDTH-1), D_HEIGHT-8-1)
         var y = min(1 + randi() % (D_WIDTH-1), D_HEIGHT-8-1)
         var width = 2 + randi() % 6
         var height = 2 + randi() % 6
         print(x, '/', y, '/', width, '/', height)
-        fill_box(dungeon, x, y, width, height)
+        fill_box(dungeon, x, y, width, height, D_FLOOR)
         dig_corridors(dungeon, D_WIDTH, D_HEIGHT, x, y, width, height)
     draw_walls(dungeon, D_WIDTH, D_HEIGHT)
     var room = Room.new(dungeon)
-    draw_room(room, 0, 0)
+    draw_tilemap(room, 0, 0)
 

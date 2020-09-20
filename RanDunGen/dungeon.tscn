@@ -13,11 +13,46 @@ cell_custom_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
 format = 1
 
 [node name="SeedEdit" type="LineEdit" parent="."]
-margin_right = 58.0
+margin_left = 60.0
+margin_right = 160.0
 margin_bottom = 24.0
 focus_mode = 1
-expand_to_text_length = true
+max_length = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SeedLabel" type="Label" parent="."]
+margin_left = 10.0
+margin_top = 6.0
+margin_right = 54.0
+margin_bottom = 20.0
+rect_pivot_offset = Vector2( -2.60391, -0.452744 )
+text = "Seed"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RoomEdit" type="LineEdit" parent="."]
+margin_left = 60.0
+margin_top = 31.0
+margin_right = 160.0
+margin_bottom = 55.0
+focus_mode = 1
+max_length = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RoomLabel" type="Label" parent="."]
+margin_left = 10.0
+margin_top = 36.0
+margin_right = 54.0
+margin_bottom = 50.0
+rect_pivot_offset = Vector2( -2.60391, -0.452744 )
+text = "Rooms"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 [connection signal="text_entered" from="SeedEdit" to="." method="_on_SeedEdit_text_entered"]
+[connection signal="text_entered" from="RoomEdit" to="." method="_on_RoomEdit_text_entered"]
