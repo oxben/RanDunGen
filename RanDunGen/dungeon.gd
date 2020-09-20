@@ -1,7 +1,10 @@
 extends Node2D
 
-const D_WIDTH  = 20
-const D_HEIGHT = 15
+const D_WIDTH  = 30
+const D_HEIGHT = 30
+
+const D_CORRIDOR_CHANCE = 80
+const D_DOOR_CHANCE     = 50  
 
 const D_ANYSIDE = 0
 const D_NORTH   = 1
@@ -9,9 +12,14 @@ const D_EAST    = 2
 const D_SOUTH   = 3
 const D_WEST    = 4
 
-const D_FLOOR = 0
-const D_WALL  = 1
-const D_DIRT  = 2
+const D_FLOOR  = 0
+const D_WALL   = 1
+const D_DIRT   = 2
+const D_CORNER = 3
+const D_DOORH  = 4
+const D_DOORV  = 5
+
+const D_FLOORS = [D_FLOOR, D_DOORH, D_DOORV]
 
 const ROOM1 = [
     [1, 1, 1, 1, 1],
@@ -56,11 +64,15 @@ const ROOM5 = [
 var rooms = []
 
 var DIRT_IDX = 0
-var DIRT_NUM = 1
+var DIRT_NUM = 2
 var FLOOR_IDX = DIRT_IDX + DIRT_NUM
-var FLOOR_NUM = 5
+var FLOOR_NUM = 7
 var WALL_IDX = FLOOR_IDX + FLOOR_NUM
-var WALL_NUM = 2
+var WALL_NUM = 5
+var DOORH_IDX = WALL_IDX + WALL_NUM
+var DOORH_NUM = 1
+var DOORV_IDX = DOORH_IDX + DOORH_NUM
+var DOORV_NUM = 1
 
 class Room:
     var _size = 0 setget , get_size
@@ -125,28 +137,28 @@ class Room:
             D_SOUTH : [],
             D_WEST : []
         }
-        var x
-        var y
+        var x1  # start column for scan
+        var y1  # start line for scan
         # North
-        y = 1
+        y1 = 1
         for x in range(1, _size-1):
-            if _tiles[y][x] == 0:
-                portals[D_NORTH].append([x,y])
+            if _tiles[y1][x] == 0:
+                portals[D_NORTH].append([x,y1])
         # South
-        y = _size - 2
+        y1 = _size - 2
         for x in range(1, _size-1):
-            if _tiles[y][x] == 0:
-                portals[D_SOUTH].append([x,y])
-        x = 1
+            if _tiles[y1][x] == 0:
+                portals[D_SOUTH].append([x,y1])
+        x1 = 1
         # East
         for y in range(1, _size-1):
-            if _tiles[y][x] == 0:
-                portals[D_EAST].append([x,y])
-        x = _size - 2
+            if _tiles[y][x1] == 0:
+                portals[D_EAST].append([x1,y])
+        x1 = _size - 2
         # West
         for y in range(1, _size-1):
-            if _tiles[y][x] == 0:
-                portals[D_WEST].append([x,y])
+            if _tiles[y][x1] == 0:
+                portals[D_WEST].append([x1,y])
         # Set portals
         _portals = portals
 
@@ -156,7 +168,8 @@ class Room:
 
 func _ready():
     set_process_input(true)
-    generate_dungeon_3()
+    get_node("SeedEdit").text = "0"
+    generate_dungeon_3(0)
 #    rooms.append(Room.new(ROOM1))
 #    rooms.append(Room.new(ROOM2))
 #    rooms.append(Room.new(ROOM3))
@@ -177,8 +190,15 @@ func _input(event):
         get_tree().quit()
         return
     if Input.is_action_pressed("gen_dungeon"):
-        generate_dungeon_3()
+        # Generate random seed
+        var dungeon_seed = randi()
+        get_node("SeedEdit").text = str(dungeon_seed)
+        # Generate dungeon
+        generate_dungeon_3(dungeon_seed)
         return
+
+func _on_SeedEdit_text_entered(new_text):
+    generate_dungeon_3(new_text.to_int())
 
 func draw_room(room, ox, oy):
     var tiles = room.get_tiles()
@@ -188,8 +208,12 @@ func draw_room(room, ox, oy):
         for x in range(room.get_size()):
             if tiles[y][x] == D_FLOOR:
                 id =  FLOOR_IDX + randi() % FLOOR_NUM
-            elif tiles[y][x] == D_WALL:
+            elif tiles[y][x] == D_WALL or tiles[y][x] == D_CORNER:
                 id = WALL_IDX + randi() % WALL_NUM
+            elif tiles[y][x] == D_DOORH:
+                id = DOORH_IDX
+            elif tiles[y][x] == D_DOORV:
+                id = DOORV_IDX
             else:
                 id = DIRT_IDX + randi() % DIRT_NUM
             tilemap.set_cell(ox + x, oy + y, id)
@@ -257,33 +281,123 @@ func fill_box(a, x, y, w, h):
 
 func draw_walls(a, w, h):
     var prev = -1
+    var curr = -1
+    var next = -1
     for y in range(h):
         for x in range(w):
-            if a[y][x] == D_FLOOR and prev == D_DIRT:
+            curr = a[y][x]
+            if curr in D_FLOORS and prev == D_DIRT:
                 a[y][x-1] = D_WALL
-            elif a[y][x] == D_DIRT and prev == D_FLOOR:
+            elif curr == D_DIRT and prev in D_FLOORS:
                 a[y][x] = D_WALL
             prev = a[y][x]
     prev = -1
     for x in range(w):
         for y in range(h):
-            if a[y][x] == D_FLOOR and prev == D_DIRT:
+            curr = a[y][x]
+            if curr in D_FLOORS and prev == D_DIRT:
                 a[y-1][x] = D_WALL
-            elif a[y][x] == D_DIRT and prev == D_FLOOR:
+            elif curr == D_DIRT and prev in D_FLOORS:
                 a[y][x] = D_WALL
             prev = a[y][x]
+    # Add corners
+    prev = -1
+    for y in range(h):
+        for x in range(w):
+            if a[y][x] == D_WALL and prev == D_DIRT:
+                if a[y-1][x] == D_FLOOR or a[y+1][x] in D_FLOORS:
+                    a[y][x-1] = D_CORNER
+            elif a[y][x] == D_DIRT and prev == D_WALL:
+                if a[y-1][x-1] in D_FLOORS or a[y+1][x-1] in D_FLOORS:
+                    a[y][x] = D_CORNER
+            prev = a[y][x]
+    # Remove doors with no walls on both side
+    prev = -1
+    for y in range(h):
+        for x in range(w):
+            if a[y][x] == D_DOORV:
+                prev = a[y-1][x] if y > 0 else -1
+                next = a[y+1][x] if y < h-1 else -1
+                if  prev != D_WALL or next != D_WALL:
+                    a[y][x] = D_FLOOR
+            elif a[y][x] == D_DOORH:
+                prev = a[y][x-1] if x > 0 else -1
+                next = a[y][x+1] if x < w-1 else -1
+                if  prev != D_WALL or next != D_WALL:
+                    a[y][x] = D_FLOOR
+ 
 
-func generate_dungeon_3():
-    var dungeon = alloc_array(20, 20)
-    var room_num = 10
+func dig_corridors(a, aw, ah, rx, ry, rw, rh):
+    # Each room has a 50% chance in each direction to have a corridor
+    var x
+    var y
+    var l
+    # North wall
+    if ((randi() % 100) < D_CORRIDOR_CHANCE):
+        l = randi() % ry
+        x = rx + (randi() % rw)
+        y = ry - l
+        for idx in range(l):
+            if a[y+idx][x] != D_FLOOR:
+                if l >= 2 and idx == (l-1):
+                    a[y+idx][x] = D_DOORH
+                else:
+                    a[y+idx][x] = D_FLOOR
+            else:
+                break
+    # South wall
+    if ((randi() % 100) < D_CORRIDOR_CHANCE):
+        x = rx + (randi() % rw)
+        y = ry + rh
+        l = randi() % (ah - y)
+        for idx in range(l):
+            if a[y+idx][x] != D_FLOOR:
+                if l >= 2 and idx == 0:
+                    a[y+idx][x] = D_DOORH
+                else:
+                    a[y+idx][x] = D_FLOOR
+            else:
+                break
+    # East wall
+    if ((randi() % 100) < D_CORRIDOR_CHANCE):
+        x = rx + rw
+        y = ry + (randi() % rh)
+        l = randi() % (aw - x)
+        for idx in range(l):
+            if a[y][x+idx] != D_FLOOR:
+                if l >= 2 and idx == 0:
+                    a[y][x+idx] = D_DOORV
+                else:
+                    a[y][x+idx] = D_FLOOR
+            else:
+                break
+    # West wall
+    if ((randi() % 100) < D_CORRIDOR_CHANCE):
+        l = randi() % rx
+        x = rx - l
+        y = ry + (randi() % rh)
+        for idx in range(l):
+            if a[y][x+idx] != D_FLOOR:
+                if l >= 2 and idx == (l-1):
+                    a[y][x+idx] = D_DOORV
+                else:
+                    a[y][x+idx] = D_FLOOR
+            else:
+                break
+
+func generate_dungeon_3(dungeon_seed):
+    seed(dungeon_seed)
+    var dungeon = alloc_array(D_WIDTH, D_HEIGHT)
+    var room_num = 8
     for idx in range(room_num):
-        var x = min(1 + randi() % (20-1), 20-6-1)
-        var y = min(1 + randi() % (20-1), 20-6-1)
-        var width = 2 + randi() % 4
-        var height = 2 + randi() % 4
+        var x = min(1 + randi() % (D_WIDTH-1), D_HEIGHT-8-1)
+        var y = min(1 + randi() % (D_WIDTH-1), D_HEIGHT-8-1)
+        var width = 2 + randi() % 6
+        var height = 2 + randi() % 6
         print(x, '/', y, '/', width, '/', height)
         fill_box(dungeon, x, y, width, height)
-    draw_walls(dungeon, 20, 20)
+        dig_corridors(dungeon, D_WIDTH, D_HEIGHT, x, y, width, height)
+    draw_walls(dungeon, D_WIDTH, D_HEIGHT)
     var room = Room.new(dungeon)
     draw_room(room, 0, 0)
 
