@@ -3,20 +3,21 @@
 importer="texture"
 type="StreamTexture"
 path="res://.import/tiles-02.png-e4fc5132b6b2f52c08d0ec94d66acdb3.stex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
 source_file="res://assets/gfx/tiles-02.png"
-source_md5="893016005f568d1bbdc0c631702b7af6"
-
 dest_files=[ "res://.import/tiles-02.png-e4fc5132b6b2f52c08d0ec94d66acdb3.stex" ]
-dest_md5="e884b58c6dcf851cb50a3df926f470a9"
 
 [params]
 
 compress/mode=0
 compress/lossy_quality=0.7
 compress/hdr_mode=0
+compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
 flags/filter=false
@@ -26,6 +27,7 @@ flags/srgb=2
 process/fix_alpha_border=true
 process/premult_alpha=false
 process/HDR_as_SRGB=false
+process/invert_color=false
 stream=false
 size_limit=0
 detect_3d=true
