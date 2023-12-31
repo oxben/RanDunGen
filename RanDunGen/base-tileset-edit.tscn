@@ -1,131 +1,101 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://bqv0mqjp83cwy"]
 
-[ext_resource path="res://assets/gfx/tiles-02.png" type="Texture" id=1]
+[ext_resource type="Texture2D" uid="uid://cnfp6sk3tmq5a" path="res://assets/gfx/tiles-02.png" id="1"]
 
-[node name="Node2D" type="Node2D" index="0"]
+[node name="Node2D" type="Node2D"]
 
-[node name="Dirt-0" type="Sprite" parent="." index="0"]
-
-position = Vector2( 96, 16 )
-texture = ExtResource( 1 )
+[node name="Dirt-0" type="Sprite2D" parent="."]
+position = Vector2(96, 16)
+texture = ExtResource("1")
 region_enabled = true
-region_rect = Rect2( 40, 0, 32, 32 )
+region_rect = Rect2(40, 0, 32, 32)
 
-[node name="Dirt-1" type="Sprite" parent="." index="1"]
-
-position = Vector2( 96, 56 )
-texture = ExtResource( 1 )
+[node name="Dirt-1" type="Sprite2D" parent="."]
+position = Vector2(96, 56)
+texture = ExtResource("1")
 region_enabled = true
-region_rect = Rect2( 80, 400, 32, 32 )
-_sections_unfolded = [ "Region" ]
+region_rect = Rect2(80, 400, 32, 32)
 
-[node name="Floor-0" type="Sprite" parent="." index="2"]
-
-position = Vector2( 16, 16 )
-texture = ExtResource( 1 )
+[node name="Floor-0" type="Sprite2D" parent="."]
+position = Vector2(16, 16)
+texture = ExtResource("1")
 region_enabled = true
-region_rect = Rect2( 0, 40, 32, 32 )
-_sections_unfolded = [ "Region" ]
+region_rect = Rect2(0, 40, 32, 32)
 
-[node name="Floor-1" type="Sprite" parent="." index="3"]
-
-position = Vector2( 16, 56 )
-texture = ExtResource( 1 )
+[node name="Floor-1" type="Sprite2D" parent="."]
+position = Vector2(16, 56)
+texture = ExtResource("1")
 region_enabled = true
-region_rect = Rect2( 0, 80, 32, 32 )
+region_rect = Rect2(0, 80, 32, 32)
 
-[node name="Floor-2" type="Sprite" parent="." index="4"]
-
-position = Vector2( 16, 96 )
-texture = ExtResource( 1 )
+[node name="Floor-2" type="Sprite2D" parent="."]
+position = Vector2(16, 96)
+texture = ExtResource("1")
 region_enabled = true
-region_rect = Rect2( 0, 120, 32, 32 )
+region_rect = Rect2(0, 120, 32, 32)
 
-[node name="Floor-3" type="Sprite" parent="." index="5"]
-
-position = Vector2( 16, 136 )
-texture = ExtResource( 1 )
+[node name="Floor-3" type="Sprite2D" parent="."]
+position = Vector2(16, 136)
+texture = ExtResource("1")
 region_enabled = true
-region_rect = Rect2( 0, 160, 32, 32 )
+region_rect = Rect2(0, 160, 32, 32)
 
-[node name="Floor-4" type="Sprite" parent="." index="6"]
-
-position = Vector2( 16, 176 )
-texture = ExtResource( 1 )
+[node name="Floor-4" type="Sprite2D" parent="."]
+position = Vector2(16, 176)
+texture = ExtResource("1")
 region_enabled = true
-region_rect = Rect2( 0, 200, 32, 32 )
-_sections_unfolded = [ "Region" ]
+region_rect = Rect2(0, 200, 32, 32)
 
-[node name="Floor-5" type="Sprite" parent="." index="7"]
-
-position = Vector2( 16, 216 )
-texture = ExtResource( 1 )
+[node name="Floor-5" type="Sprite2D" parent="."]
+position = Vector2(16, 216)
+texture = ExtResource("1")
 region_enabled = true
-region_rect = Rect2( 0, 240, 32, 32 )
-_sections_unfolded = [ "Region" ]
+region_rect = Rect2(0, 240, 32, 32)
 
-[node name="Floor-6" type="Sprite" parent="." index="8"]
-
-position = Vector2( 16, 256 )
-texture = ExtResource( 1 )
+[node name="Floor-6" type="Sprite2D" parent="."]
+position = Vector2(16, 256)
+texture = ExtResource("1")
 region_enabled = true
-region_rect = Rect2( 0, 40, 32, 32 )
-_sections_unfolded = [ "Region" ]
+region_rect = Rect2(0, 40, 32, 32)
 
-[node name="Wall-0" type="Sprite" parent="." index="9"]
-
-position = Vector2( 56, 16 )
-texture = ExtResource( 1 )
+[node name="Wall-0" type="Sprite2D" parent="."]
+position = Vector2(56, 16)
+texture = ExtResource("1")
 region_enabled = true
-region_rect = Rect2( 640, 40, 32, 32 )
-_sections_unfolded = [ "Region" ]
+region_rect = Rect2(640, 40, 32, 32)
 
-[node name="Wall-1" type="Sprite" parent="." index="10"]
-
-position = Vector2( 56, 56 )
-texture = ExtResource( 1 )
+[node name="Wall-1" type="Sprite2D" parent="."]
+position = Vector2(56, 56)
+texture = ExtResource("1")
 region_enabled = true
-region_rect = Rect2( 640, 80, 32, 32 )
-_sections_unfolded = [ "Region" ]
+region_rect = Rect2(640, 80, 32, 32)
 
-[node name="Wall-2" type="Sprite" parent="." index="11"]
-
-position = Vector2( 56, 96 )
-texture = ExtResource( 1 )
+[node name="Wall-2" type="Sprite2D" parent="."]
+position = Vector2(56, 96)
+texture = ExtResource("1")
 region_enabled = true
-region_rect = Rect2( 640, 120, 32, 32 )
-_sections_unfolded = [ "Offset", "Region" ]
+region_rect = Rect2(640, 120, 32, 32)
 
-[node name="Wall-3" type="Sprite" parent="." index="12"]
-
-position = Vector2( 56, 136 )
-texture = ExtResource( 1 )
+[node name="Wall-3" type="Sprite2D" parent="."]
+position = Vector2(56, 136)
+texture = ExtResource("1")
 region_enabled = true
-region_rect = Rect2( 640, 160, 32, 32 )
-_sections_unfolded = [ "Offset", "Region" ]
+region_rect = Rect2(640, 160, 32, 32)
 
-[node name="Wall-4" type="Sprite" parent="." index="13"]
-
-position = Vector2( 56, 176 )
-texture = ExtResource( 1 )
+[node name="Wall-4" type="Sprite2D" parent="."]
+position = Vector2(56, 176)
+texture = ExtResource("1")
 region_enabled = true
-region_rect = Rect2( 640, 200, 32, 32 )
-_sections_unfolded = [ "Offset", "Region" ]
+region_rect = Rect2(640, 200, 32, 32)
 
-[node name="DoorH-0" type="Sprite" parent="." index="14"]
-
-position = Vector2( 136, 16 )
-texture = ExtResource( 1 )
+[node name="DoorH-0" type="Sprite2D" parent="."]
+position = Vector2(136, 16)
+texture = ExtResource("1")
 region_enabled = true
-region_rect = Rect2( 0, 400, 32, 32 )
-_sections_unfolded = [ "Offset", "Region" ]
+region_rect = Rect2(0, 400, 32, 32)
 
-[node name="DoorV-0" type="Sprite" parent="." index="15"]
-
-position = Vector2( 176, 16 )
-texture = ExtResource( 1 )
+[node name="DoorV-0" type="Sprite2D" parent="."]
+position = Vector2(176, 16)
+texture = ExtResource("1")
 region_enabled = true
-region_rect = Rect2( 40, 400, 32, 32 )
-_sections_unfolded = [ "Offset", "Region" ]
-
-
+region_rect = Rect2(40, 400, 32, 32)
