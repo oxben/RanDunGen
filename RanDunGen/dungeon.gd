@@ -64,7 +64,7 @@ const ROOM5 = [
 var rooms = []
 
 var DIRT_IDX  = 0
-var DIRT_NUM  = 1
+var DIRT_NUM  = 5
 var FLOOR_IDX = 1
 var FLOOR_NUM = 6
 var WALL_IDX  = 2
