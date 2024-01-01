@@ -1034,4 +1034,5 @@ texture_region_size = Vector2i(32, 32)
 
 [resource]
 tile_size = Vector2i(32, 32)
+occlusion_layer_0/light_mask = 1
 sources/0 = SubResource("TileSetAtlasSource_db4fk")

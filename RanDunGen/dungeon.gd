@@ -405,17 +405,19 @@ func _ready():
 
 
 func _input(event):
-	#if event.type == InputEvent.KEY:
 	if Input.is_action_pressed("quit_game"):
 		get_tree().quit()
 		return
-	if Input.is_action_pressed("gen_dungeon"):
+	elif Input.is_action_pressed("gen_dungeon"):
 		# Generate random seed
 		var dungeon_seed = randi()
 		$SeedEdit.text = str(dungeon_seed)
 		# Generate dungeon
 		generate_dungeon_3(dungeon_seed, $RoomEdit.text.to_int())
 		return
+	elif event is InputEventMouseButton:
+		if event.is_released():
+			$PointLight2D.position = event.position
 
 
 func _on_SeedEdit_text_entered(new_text):
