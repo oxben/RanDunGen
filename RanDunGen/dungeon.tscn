@@ -10,8 +10,9 @@ script = ExtResource("1")
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = ExtResource("2")
 format = 2
-layer_0/name = "Shadows"
-layer_1/name = "Main"
+layer_0/name = "Floor"
+layer_1/name = "Walls"
+layer_1/z_index = 1
 layer_1/tile_data = PackedInt32Array()
 
 [node name="SeedEdit" type="LineEdit" parent="."]
@@ -47,6 +48,8 @@ vertical_alignment = 1
 [node name="PointLight2D" type="PointLight2D" parent="."]
 position = Vector2(448, 192)
 color = Color(1, 0.592157, 0.278431, 1)
+shadow_enabled = true
+shadow_filter = 1
 texture = ExtResource("3_x3o4i")
 
 [connection signal="text_submitted" from="SeedEdit" to="." method="_on_SeedEdit_text_entered"]

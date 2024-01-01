@@ -4,7 +4,7 @@ const D_WIDTH  = 30
 const D_HEIGHT = 30
 
 const D_CORRIDOR_CHANCE = 80
-const D_DOOR_CHANCE     = 50  
+const D_DOOR_CHANCE     = 50
 
 const D_ANYSIDE = 0
 const D_NORTH   = 1
@@ -240,12 +240,12 @@ class WallFeature:
 	var _idx
 	var _num
 	var _feature
-	
+
 	func _init(feature, idx, num):
 		_idx = idx  # Tile column index
 		_num = num  # Num of tiles
 		_feature = feature  # Feature map
-		
+
 	func compare(tiles, x, y):
 		var i = 0
 		while i < 3:
@@ -415,9 +415,12 @@ func _input(event):
 		# Generate dungeon
 		generate_dungeon_3(dungeon_seed, $RoomEdit.text.to_int())
 		return
+	elif event is InputEventMouseMotion:
+		# Move light
+		$PointLight2D.position = event.position
 	elif event is InputEventMouseButton:
 		if event.is_released():
-			$PointLight2D.position = event.position
+			pass
 
 
 func _on_SeedEdit_text_entered(new_text):
@@ -532,7 +535,7 @@ func draw_walls(a, w, h):
 	var prev = -1
 	var curr = -1
 	var next = -1
-	# detect wall locations by scanning vertically 
+	# detect wall locations by scanning vertically
 	for y in range(h):
 		for x in range(w):
 			curr = a[y][x]
@@ -541,7 +544,7 @@ func draw_walls(a, w, h):
 			elif curr == D_DIRT and prev in D_FLOORS:
 				a[y][x] = D_WALL
 			prev = a[y][x]
-	# detect wall locations by scanning horizontally 
+	# detect wall locations by scanning horizontally
 	prev = -1
 	for x in range(w):
 		for y in range(h):
@@ -576,7 +579,7 @@ func draw_walls(a, w, h):
 				next = a[y][x+1] if x < w-1 else -1
 				if  prev != D_WALL or next != D_WALL:
 					a[y][x] = D_FLOOR
- 
+
 
 func dig_corridors(a, aw, ah, rx, ry, rw, rh):
 	# Each room has a 50% chance in each direction to have a corridor
