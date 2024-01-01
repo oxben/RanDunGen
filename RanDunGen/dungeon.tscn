@@ -9,6 +9,9 @@ script = ExtResource("1")
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = ExtResource("2")
 format = 2
+layer_0/name = "Shadows"
+layer_1/name = "Main"
+layer_1/tile_data = PackedInt32Array()
 
 [node name="SeedEdit" type="LineEdit" parent="."]
 offset_left = 60.0
