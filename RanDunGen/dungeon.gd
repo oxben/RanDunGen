@@ -417,6 +417,10 @@ func _input(event):
 		return
 	elif event is InputEventMouseMotion:
 		# Move light
+		var tile_coords = $TileMap.local_to_map(event.position)
+		var tiles = rooms[0].get_tiles()
+		var tile = tiles[tile_coords.y][tile_coords.x]
+		$PointLight2D.enabled = true if tile == D_FLOOR else false
 		$PointLight2D.position = event.position
 	elif event is InputEventMouseButton:
 		if event.is_released():
@@ -653,4 +657,8 @@ func generate_dungeon_3(dungeon_seed, room_num = 8):
 		dig_corridors(dungeon, D_WIDTH, D_HEIGHT, x, y, width, height)
 	draw_walls(dungeon, D_WIDTH, D_HEIGHT)
 	var room = Room.new(dungeon)
+	if rooms.size() > 0:
+		rooms[0] = room
+	else:
+		rooms.append(room)
 	draw_tilemap(room, 0, 0)
