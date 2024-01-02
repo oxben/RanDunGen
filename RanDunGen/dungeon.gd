@@ -1,4 +1,7 @@
 extends Node2D
+## Generate random 2D dungeons
+##
+## @author: Oxben <oxben@free.fr>
 
 const D_WIDTH  = 30
 const D_HEIGHT = 30
@@ -21,6 +24,9 @@ const D_DOORH  =  4
 const D_DOORV  =  5
 
 const D_FLOORS = [D_FLOOR, D_DOORH, D_DOORV]
+
+const LAYER_FLOOR   = 0
+const LAYER_SHADOWS = 1
 
 const ROOM1 = [
 	[1, 1, 1, 1, 1],
@@ -196,45 +202,92 @@ const DOORH_NUM = 1
 const DOORV_IDX = 4
 const DOORV_NUM = 1
 const WALL_NORTH_IDX = 7
-const WALL_NORTH_NUM = 1
+const WALL_NORTH_NUM = 2
 const WALL_EAST_IDX  = 8
-const WALL_EAST_NUM  = 1
+const WALL_EAST_NUM  = 2
 const WALL_SOUTH_IDX = 5
-const WALL_SOUTH_NUM = 1
+const WALL_SOUTH_NUM = 2
 const WALL_WEST_IDX  = 6
-const WALL_WEST_NUM  = 1
+const WALL_WEST_NUM  = 2
 const WALL_CORNER_NW_IDX = 20
-const WALL_CORNER_NW_NUM = 1
+const WALL_CORNER_NW_NUM = 2
 const WALL_CORNER_NE_IDX = 21
-const WALL_CORNER_NE_NUM = 1
+const WALL_CORNER_NE_NUM = 2
 const WALL_CORNER_SW_IDX = 19
-const WALL_CORNER_SW_NUM = 1
+const WALL_CORNER_SW_NUM = 2
 const WALL_CORNER_SE_IDX = 22
-const WALL_CORNER_SE_NUM = 1
+const WALL_CORNER_SE_NUM = 2
 const WALL_ANGLE_NW_IDX = 10
-const WALL_ANGLE_NW_NUM = 1
+const WALL_ANGLE_NW_NUM = 2
 const WALL_ANGLE_SW_IDX = 9
-const WALL_ANGLE_SW_NUM = 1
+const WALL_ANGLE_SW_NUM = 2
 const WALL_ANGLE_NE_IDX = 11
-const WALL_ANGLE_NE_NUM = 1
+const WALL_ANGLE_NE_NUM = 2
 const WALL_ANGLE_SE_IDX = 12
-const WALL_ANGLE_SE_NUM = 1
+const WALL_ANGLE_SE_NUM = 2
 const WALL_COLUMN_IDX = 2
 const WALL_COLUMN_NUM = 5
 const WALL_INNER_NS_IDX = 13
-const WALL_INNER_NS_NUM = 1
+const WALL_INNER_NS_NUM = 2
 const WALL_INNER_WE_IDX = 14
-const WALL_INNER_WE_NUM = 1
+const WALL_INNER_WE_NUM = 2
 const WALL_INNER_WNE_IDX = 18
-const WALL_INNER_WNE_NUM = 1
+const WALL_INNER_WNE_NUM = 2
 const WALL_INNER_WSE_IDX = 16
-const WALL_INNER_WSE_NUM = 1
+const WALL_INNER_WSE_NUM = 2
 const WALL_INNER_NWS_IDX = 15
-const WALL_INNER_NWS_NUM = 1
+const WALL_INNER_NWS_NUM = 2
 const WALL_INNER_SEN_IDX = 17
-const WALL_INNER_SEN_NUM = 1
+const WALL_INNER_SEN_NUM = 2
+
+const SHADOW_WALL_NORTH = [
+	[D_VOID, D_WALL, D_VOID],
+	[D_VOID, D_FLOOR, D_VOID],
+	[D_VOID, D_VOID, D_VOID],
+]
+
+const SHADOW_WALL_NORTH_ANGLE = [
+	[D_FLOOR, D_WALL, D_VOID],
+	[D_VOID, D_FLOOR, D_VOID],
+	[D_VOID, D_VOID, D_VOID],
+]
+
+const SHADOW_WALL_WEST = [
+	[D_VOID, D_VOID, D_VOID],
+	[D_WALL, D_FLOOR, D_VOID],
+	[D_VOID, D_VOID, D_VOID],
+]
+
+const SHADOW_WALL_WEST_ANGLE = [
+	[D_FLOOR, D_VOID, D_VOID],
+	[D_WALL, D_FLOOR, D_VOID],
+	[D_VOID, D_VOID, D_VOID],
+]
+
+const SHADOW_WALL_NW_CORNER = [
+	[D_VOID, D_WALL, D_VOID],
+	[D_WALL, D_FLOOR, D_VOID],
+	[D_VOID, D_VOID, D_VOID],
+]
+
+const SHADOW_WALL_SE_ANGLE = [
+	[D_WALL, D_FLOOR, D_VOID],
+	[D_FLOOR, D_FLOOR, D_VOID],
+	[D_VOID, D_VOID, D_VOID],
+]
+
+const SHADOW_OFFSET = 8
+const SHADOW_WALL_NORTH_IDX = 5
+const SHADOW_WALL_NORTH_ANGLE_IDX = 6
+const SHADOW_WALL_WEST_IDX = 7
+const SHADOW_WALL_WEST_ANGLE_IDX = 8
+const SHADOW_WALL_NW_CORNER_IDX = 9
+const SHADOW_WALL_SE_ANGLE_IDX = 10
+const SHADOW_DOORH_IDX = 11
+const SHADOW_DOORV_IDX = 12
 
 var wall_features = []
+var shadow_features = []
 
 class WallFeature:
 	var _idx
@@ -261,7 +314,8 @@ class WallFeature:
 		return true
 
 
-func init_room_features():
+## Registers wall features in a global array
+func init_wall_features():
 	# Order is important: the more specific feature must be inserted first,
 	# and the less specific ones (with more void cells) at the end
 	wall_features.append(WallFeature.new(WALL_COLUMN,    WALL_COLUMN_IDX,    WALL_COLUMN_NUM))
@@ -286,6 +340,13 @@ func init_room_features():
 	wall_features.append(WallFeature.new(WALL_SOUTH,     WALL_SOUTH_IDX,     WALL_SOUTH_NUM))
 	wall_features.append(WallFeature.new(WALL_DEFAULT,   WALL_IDX,           WALL_NUM))
 
+func init_shadow_features():
+	shadow_features.append(WallFeature.new(SHADOW_WALL_NW_CORNER, SHADOW_WALL_NW_CORNER_IDX, 1))
+	shadow_features.append(WallFeature.new(SHADOW_WALL_SE_ANGLE, SHADOW_WALL_SE_ANGLE_IDX, 1))
+	shadow_features.append(WallFeature.new(SHADOW_WALL_NORTH_ANGLE, SHADOW_WALL_NORTH_ANGLE_IDX, 1))
+	shadow_features.append(WallFeature.new(SHADOW_WALL_WEST_ANGLE, SHADOW_WALL_WEST_ANGLE_IDX, 1))
+	shadow_features.append(WallFeature.new(SHADOW_WALL_NORTH, SHADOW_WALL_NORTH_IDX, 1))
+	shadow_features.append(WallFeature.new(SHADOW_WALL_WEST, SHADOW_WALL_WEST_IDX, 1))
 
 class Room:
 	var _size = 0: get = get_size
@@ -387,7 +448,8 @@ class Room:
 func _ready():
 	$SeedEdit.text = "0"
 	$RoomEdit.text = "8"
-	init_room_features()
+	init_wall_features()
+	init_shadow_features()
 	generate_dungeon_3(0, 8)
 #    rooms.append(Room.new(ROOM1))
 #    rooms.append(Room.new(ROOM2))
@@ -437,18 +499,29 @@ func _on_RoomEdit_text_entered(new_text):
 	$RoomEdit.release_focus()
 
 
+func _on_shadows_button_toggled(toggled_on):
+	$TileMap.set_layer_enabled(LAYER_SHADOWS, toggled_on)
+
+
 func draw_tilemap(room, ox, oy):
 	var tiles = room.get_tiles()
 	var tilemap = $TileMap
 	var tile = Vector2i(0, 0) # tile coords
 	var shadow = false
 	var shadow_tile = Vector2i(0, 0) # shadow tile coords
+	tilemap.clear()
 	for y in range(room.get_size()):
 		for x in range(room.get_size()):
 			shadow = false
 			if tiles[y][x] == D_FLOOR:
 				tile.x = FLOOR_IDX
 				tile.y = randi() % FLOOR_NUM
+				for f in shadow_features:
+					if f.compare(tiles, x-1, y-1):
+						shadow = true
+						shadow_tile.x = f._idx
+						shadow_tile.y = SHADOW_OFFSET
+						break
 			elif tiles[y][x] == D_WALL or tiles[y][x] == D_CORNER:
 				for f in wall_features:
 					if f.compare(tiles, x-1, y-1):
@@ -458,16 +531,22 @@ func draw_tilemap(room, ox, oy):
 			elif tiles[y][x] == D_DOORH:
 				tile.x = DOORH_IDX
 				tile.y = 0
+				shadow = true
+				shadow_tile.x = SHADOW_DOORH_IDX
+				shadow_tile.y = SHADOW_OFFSET
 			elif tiles[y][x] == D_DOORV:
 				tile.x = DOORV_IDX
 				tile.y = 0
+				shadow = true
+				shadow_tile.x = SHADOW_DOORV_IDX
+				shadow_tile.y = SHADOW_OFFSET
 			else:
 				tile.x = DIRT_IDX
 				tile.y = randi() % DIRT_NUM
 			var pos = Vector2i(ox + x, oy + y)
 			tilemap.set_cell(0, pos, 0, tile)
 			if shadow:
-				tilemap.set_cell(1, pos, 0, tile)
+				tilemap.set_cell(1, pos, 0, shadow_tile)
 
 
 func generate_dungeon():
@@ -585,8 +664,9 @@ func draw_walls(a, w, h):
 					a[y][x] = D_FLOOR
 
 
+## Digs corridors on each side of a room
+## Each room has a 50% chance in each direction to have a corridor
 func dig_corridors(a, aw, ah, rx, ry, rw, rh):
-	# Each room has a 50% chance in each direction to have a corridor
 	var x
 	var y
 	var l

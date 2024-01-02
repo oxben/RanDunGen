@@ -11,7 +11,8 @@ script = ExtResource("1")
 tile_set = ExtResource("2")
 format = 2
 layer_0/name = "Floor"
-layer_1/name = "Walls"
+layer_1/name = "Shadows"
+layer_1/modulate = Color(1, 1, 1, 0.333333)
 layer_1/z_index = 1
 layer_1/tile_data = PackedInt32Array()
 
@@ -45,6 +46,20 @@ pivot_offset = Vector2(-2.60391, -0.452744)
 text = "Rooms"
 vertical_alignment = 1
 
+[node name="ShadowsLabel" type="Label" parent="."]
+offset_left = 360.0
+offset_right = 429.0
+offset_bottom = 32.0
+pivot_offset = Vector2(-2.60391, -0.452744)
+text = "Shadows"
+vertical_alignment = 1
+
+[node name="ShadowsButton" type="CheckButton" parent="."]
+offset_left = 432.0
+offset_right = 476.0
+offset_bottom = 32.0
+button_pressed = true
+
 [node name="PointLight2D" type="PointLight2D" parent="."]
 position = Vector2(448, 192)
 color = Color(1, 0.592157, 0.278431, 1)
@@ -54,3 +69,4 @@ texture = ExtResource("3_x3o4i")
 
 [connection signal="text_submitted" from="SeedEdit" to="." method="_on_SeedEdit_text_entered"]
 [connection signal="text_submitted" from="RoomEdit" to="." method="_on_RoomEdit_text_entered"]
+[connection signal="toggled" from="ShadowsButton" to="." method="_on_shadows_button_toggled"]
